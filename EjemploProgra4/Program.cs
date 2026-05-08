@@ -1,20 +1,32 @@
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Servicios
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Mi API",
+        Version = "v1",
+        Description = "API de ejemplo en ASP.NET Core"
+    });
+});
 
 var app = builder.Build();
 
+// Swagger
+app.UseSwagger();
 
-
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API V1");
+    options.RoutePrefix = string.Empty; // Swagger abre en la raíz
+});
 
 app.UseHttpsRedirection();
 
